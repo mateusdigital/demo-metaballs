@@ -47,11 +47,11 @@ function CreateBall()
         return;
     }
 
-    balls_x    .push(Math_Random(Canvas_Edge_Left,    Canvas_Edge_Right));
-    balls_y    .push(Math_Random(Canvas_Edge_Bottom,  Canvas_Edge_Top  ));
-    balls_r    .push(Math_Random(BALLS_MIN_RADIUS,    BALLS_MAX_RADIUS ));
-    balls_vel_x.push(Math_Random(-5,                  +5               ));
-    balls_vel_y.push(Math_Random(-5,                  +5               ));
+    balls_x    .push(Random_Int(Canvas_Edge_Left,    Canvas_Edge_Right));
+    balls_y    .push(Random_Int(Canvas_Edge_Bottom,  Canvas_Edge_Top  ));
+    balls_r    .push(Random_Int(BALLS_MIN_RADIUS,    BALLS_MAX_RADIUS ));
+    balls_vel_x.push(Random_Int(-5,                  +5               ));
+    balls_vel_y.push(Random_Int(-5,                  +5               ));
 
     ++balls_length;
 }
@@ -91,7 +91,10 @@ function UpdateBall(i, dt)
 //------------------------------------------------------------------------------
 function Setup()
 {
-    for(let i = 0; i < Math_Random(MIN_BALLS, MAX_BALLS); ++i) {
+    Random_Seed(1); // @todo(stdmatt): Add random seed.
+    Input_InstallBasicMouseHandler(Canvas);
+
+    for(let i = 0; i < Random_Int(MIN_BALLS, MAX_BALLS); ++i) {
         CreateBall();
     }
 
@@ -107,6 +110,7 @@ function Draw(dt)
 {
     total_time += dt;
 
+    let color = chroma.hsl(0, 1.0, 0.5);
     Canvas_LockPixels();
     for(let y = 0; y < Canvas_Height; ++y) {
         for(let x = 0; x < Canvas_Width; ++x) {
@@ -127,8 +131,8 @@ function Draw(dt)
                 final %= 360;
             }
 
-            let rgb = hslToRgb(final / 360, 1.0, 0.5);
-            Canvas_SetColor(x,y, rgb);
+            color.set("hsl.h", final);
+            Canvas_SetColor(x,y, color.rgba());
         }
     }
     Canvas_UnlockPixels();
