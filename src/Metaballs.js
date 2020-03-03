@@ -166,7 +166,6 @@ function Draw(dt)
     }
     Canvas_UnlockPixels();
 
-
     for(let i = 0; i < balls_length; ++i) {
         UpdateBall(i, dt);
 
@@ -182,7 +181,7 @@ function Draw(dt)
 Canvas_Setup({
     main_title        : "Metaballs",
     main_date         : "Jul 18, 2019",
-    main_version      : "v0.0.1",
+    main_version      : GetVersion(),
     main_instructions : "<br>Move your mouse closer to the edge to increase speed",
-    main_link: "<a href=\"http://stdmatt.com/demos/startfield.html\">More info</a>"
+    main_link: "<a href=\"http://stdmatt.com/demos/metaballs.html\">More info</a>"
 });
