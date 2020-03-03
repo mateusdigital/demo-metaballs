@@ -76,4 +76,7 @@ mkdir -p  "$DIST_DIR";
 
 echo "Creating zip file";
 ZIP_FILENAME="metaballs_v${FINAL_VERSION}.zip";
-zip -rj "${DIST_DIR}/${ZIP_FILENAME}" "${BUILD_DIR}";
+cd ${BUILD_DIR}
+zip -r "${ZIP_FILENAME}" ".";
+mv "${ZIP_FILENAME}" ${DIST_DIR};
+cd -
