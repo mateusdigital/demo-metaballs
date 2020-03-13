@@ -28,7 +28,7 @@ const MIN_BALLS        =  2;
 const PROJECT_TITLE        = "<b>Title:</b>Metaballs<br>";
 const PROJECT_DATE         = "<b>Date:</b>Jul 18, 2019<br>";
 const PROJECT_VERSION      = "<b>Version:</b> " + GetVersion() + "<br>";
-const PROJECT_INSTRUCTIONS = "<br>Move your mouse closer to the edge to increase speed<br>";
+const PROJECT_INSTRUCTIONS = "<br>Move the mouse to control one of the metaballs<br>";
 const PROJECT_LINK         = "<a href=\"http://stdmatt.com/demos/metaballs.html\">More info</a>";
 
 
