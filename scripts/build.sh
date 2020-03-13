@@ -26,11 +26,14 @@ source /usr/local/src/stdmatt/shellscript_utils/main.sh
 ##----------------------------------------------------------------------------##
 ## Variables                                                                  ##
 ##----------------------------------------------------------------------------##
+PROJECT_NAME="metaballs";
+PROJECT_PACKAGE_NAME="metaballs";
+
 SCRIPT_DIR="$(pw_get_script_dir)";
 ROOT_DIR="$(pw_abspath "${SCRIPT_DIR}/..")";
 BUILD_DIR="${ROOT_DIR}/build";
 DIST_DIR="${ROOT_DIR}/dist";
-TO_COPY="libs/ src/ index.html";
+TO_COPY="libs/ src/ css/ index.html";
 
 
 ##----------------------------------------------------------------------------##
@@ -75,7 +78,7 @@ rm    -rf "$DIST_DIR";
 mkdir -p  "$DIST_DIR";
 
 echo "Creating zip file";
-ZIP_FILENAME="metaballs_v${FINAL_VERSION}.zip";
+ZIP_FILENAME="${PROJECT_PACKAGE_NAME}_v${FINAL_VERSION}.zip";
 cd ${BUILD_DIR}
 zip -r "${ZIP_FILENAME}" ".";
 mv "${ZIP_FILENAME}" ${DIST_DIR};
