@@ -19,9 +19,8 @@
 //----------------------------------------------------------------------------//
 // Constants                                                                  //
 //----------------------------------------------------------------------------//
-const METABALLS_VERSION_MAJOR = 1;
-const METABALLS_VERSION_MINOR = 0;
-const METABALLS_VERSION_BABY  = 0;
+const METABALLS_VERSION = "1.0.1";
+
 
 //----------------------------------------------------------------------------//
 // Public Functions                                                           //
@@ -29,9 +28,5 @@ const METABALLS_VERSION_BABY  = 0;
 //------------------------------------------------------------------------------
 function GetVersion()
 {
-    return String_Cat(
-        METABALLS_VERSION_MAJOR, ".",
-        METABALLS_VERSION_MINOR, ".",
-        METABALLS_VERSION_BABY
-    );
+    return METABALLS_VERSION;
 }
