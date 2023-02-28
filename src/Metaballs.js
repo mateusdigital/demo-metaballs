@@ -135,7 +135,6 @@ function Setup()
 
     const ratio = min_side / max_side;
 
-
     Canvas_CreateCanvas(1000, 1000, parent);
 
     Canvas.style.width  = "100%";
