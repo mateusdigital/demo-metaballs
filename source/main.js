@@ -160,6 +160,7 @@ function setup_common(canvas)
 {
     set_random_seed();
     set_main_canvas(canvas, true);
+    install_input_handlers(canvas);
 
     const balls_count = random_int(MIN_BALLS, MAX_BALLS);
     for(let i = 0; i < balls_count; ++i) {
