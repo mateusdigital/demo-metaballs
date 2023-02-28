@@ -44,7 +44,6 @@ var total_time   = 0;
 function hslToRgb(h, s, l)
 {
     var r, g, b;
-
     if (s == 0) {
       r = g = b = l; // achromatic
     } else {
@@ -68,6 +67,11 @@ function hslToRgb(h, s, l)
     return [ r * 255, g * 255, b * 255,  255];
 }
 
+function canvas_edge_left  () { return -320; }
+function canvas_edge_right () { return +320; }
+function canvas_edge_top   () { return -320; }
+function canvas_edge_bottom() { return +320; }
+
 //------------------------------------------------------------------------------
 function CreateBall()
 {
@@ -75,8 +79,8 @@ function CreateBall()
         return;
     }
 
-    balls_x    .push(Random_Int(Canvas_Edge_Left,    Canvas_Edge_Right));
-    balls_y    .push(Random_Int(Canvas_Edge_Bottom,  Canvas_Edge_Top  ));
+    balls_x    .push(Random_Int(canvas_edge_left  (), canvas_edge_right()));
+    balls_y    .push(Random_Int(canvas_edge_bottom(), canvas_edge_top  ()));
     balls_r    .push(Random_Int(BALLS_MIN_RADIUS,    BALLS_MAX_RADIUS ));
     balls_vel_x.push(Random_Int(-5,                  +5               ));
     balls_vel_y.push(Random_Int(-5,                  +5               ));
@@ -100,14 +104,14 @@ function UpdateBall(i, dt)
 
     //
     // Wrap the balls.
-    if(balls_x[i] + r < Canvas_Edge_Left ||
-       balls_x[i] - r > Canvas_Edge_Right)
+    if(balls_x[i] + r < canvas_edge_left() ||
+       balls_x[i] - r > canvas_edge_right())
     {
         balls_vel_x[i] *= -1;
     }
 
-    if(balls_y[i] + r < Canvas_Edge_Top ||
-       balls_y[i] - r > Canvas_Edge_Bottom)
+    if(balls_y[i] + r < canvas_edge_top() ||
+       balls_y[i] - r > canvas_edge_bottom())
     {
         balls_vel_y[i] *= -1;
     }
