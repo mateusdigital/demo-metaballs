@@ -40,19 +40,15 @@ const MIN_BALLS        =  2;
 //----------------------------------------------------------------------------//
 // Variables                                                                  //
 //----------------------------------------------------------------------------//
-let balls_x     = [];
-let balls_y     = [];
-let balls_r     = [];
-let balls_vel_x = [];
-let balls_vel_y = [];
-let balls_length = 0;
-var total_time   = 0;
-
-
-function canvas_edge_left  () { return -320; }
-function canvas_edge_right () { return +320; }
-function canvas_edge_top   () { return -320; }
-function canvas_edge_bottom() { return +320; }
+let balls_x       = [];
+let balls_y       = [];
+let balls_r       = [];
+let balls_vel_x   = [];
+let balls_vel_y   = [];
+let balls_length  = 0;
+let offscreen_ctx = null;
+let max_width     = 0;
+let max_height    = 0;
 
 function hslToRgb(h, s, l)
 {
@@ -79,6 +75,11 @@ function hslToRgb(h, s, l)
 
     return [ r * 255, g * 255, b * 255,  255];
 }
+
+function canvas_edge_left  () { return -(max_width  * 0.5); }
+function canvas_edge_right () { return +(max_width  * 0.5); }
+function canvas_edge_top   () { return -(max_height * 0.5); }
+function canvas_edge_bottom() { return +(max_height * 0.5); }
 
 //------------------------------------------------------------------------------
 function CreateBall()
@@ -158,13 +159,23 @@ function setup_standalone_mode()
 function setup_common(canvas)
 {
     set_random_seed();
-    set_main_canvas(canvas);
+    set_main_canvas(canvas, true);
 
     const balls_count = random_int(MIN_BALLS, MAX_BALLS);
     for(let i = 0; i < balls_count; ++i) {
         CreateBall();
     }
 
+    const v = calculate_offscreen_canvas_max_size(
+        get_canvas_width (),
+        get_canvas_height(),
+        600 * 400
+    );
+
+    max_width  = v[0]
+    max_height = v[1];
+
+    offscreen_ctx = create_offscreen_context(max_width, max_height, true);
     start_draw_loop(draw);
 }
 
@@ -187,41 +198,42 @@ function demo_main(user_canvas)
 //------------------------------------------------------------------------------
 function draw(dt)
 {
-    begin_draw();
-        clear_canvas();
+    offscreen_ctx.lock_pixels();
+    for(let y = 0; y < max_height; ++y) {
+        for(let x = 0; x < max_width; ++x) {
+            let sum = 0;
 
-        total_time += dt;
-        lock_canvas_pixels();
-        for(let y = 0; y < 0.5 * get_canvas_height(); ++y) {
-            for(let x = 0; x < 0.5 * get_canvas_width(); ++x) {
-                let sum = 0;
+            for(let b = 0; b < balls_length; ++b) {
+                var ball_x = (max_width  * 0.5 + balls_x[b]);
+                var ball_y = (max_height * 0.5 + balls_y[b]);
+                var ball_r = balls_r[b];
 
-                for(let b = 0; b < balls_length; ++b) {
-                    var ball_x = (get_canvas_width(0.5)  + balls_x[b]);
-                    var ball_y = (get_canvas_height(0.5) + balls_y[b]);
-                    var ball_r = balls_r[b];
-
-                    let dist  = distance(x, y, ball_x, ball_y);
-                    let value = (ball_r * 1100 / dist);
-                    sum += value;
-                }
-
-                var final = sum;
-                if(final > 360) {
-                    final %= 360;
-                }
-
-                let color = hslToRgb(final / 360.0, 1.0, 0.5);
-                set_canvas_pixel(x,y, color);
+                let dist  = distance(x, y, ball_x, ball_y);
+                let value = (ball_r * 1100 / dist);
+                sum += value;
             }
-        }
-        unlock_canvas_pixels();
 
-        for(let i = 0; i < balls_length; ++i) {
-            UpdateBall(i, dt);
+            var final = sum;
+            if(final > 360) {
+                final %= 360;
+            }
 
-            balls_x[0] = get_mouse_x() - get_canvas_width(0.5);
-            balls_y[0] = get_mouse_y() - get_canvas_height(0.5);
+            let color = hslToRgb(final / 360.0, 1.0, 0.5);
+            offscreen_ctx.set_pixel(x,y, color);
         }
-    end_draw();
+    }
+    offscreen_ctx.unlock_pixels();
+
+    for(let i = 0; i < balls_length; ++i) {
+        UpdateBall(i, dt);
+
+        balls_x[0] = get_mouse_x() - max_width  * 0.5;
+        balls_y[0] = get_mouse_y() - max_height * 0.5;
+    }
+
+    get_main_canvas_context().drawImage(
+        offscreen_ctx.canvas,
+        0, 0,offscreen_ctx.canvas.width, offscreen_ctx.canvas.height,
+        0, 0, get_canvas_width(), get_canvas_height()
+    );
 }
