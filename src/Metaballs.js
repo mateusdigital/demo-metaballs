@@ -25,13 +25,6 @@ const BALLS_MIN_RADIUS = 10;
 const MAX_BALLS        = 20;
 const MIN_BALLS        =  2;
 
-const PROJECT_TITLE        = "<b>Title:</b>Metaballs<br>";
-const PROJECT_DATE         = "<b>Date:</b>Jul 18, 2019<br>";
-const PROJECT_VERSION      = "<b>Version:</b> " + GetVersion() + "<br>";
-const PROJECT_INSTRUCTIONS = "<br>Move the mouse to control one of the metaballs<br>";
-const PROJECT_LINK         = "<a href=\"http://stdmatt.com/demos/metaballs.html\">More info</a>";
-
-
 //----------------------------------------------------------------------------//
 // Variables                                                                  //
 //----------------------------------------------------------------------------//
@@ -138,44 +131,19 @@ function Setup()
 
     const ratio = min_side / max_side;
 
-    // Landscape
-    if(parent_width > parent_height) {
-        Canvas_CreateCanvas(800, 800 * ratio, parent);
-    }
-    // Portrait
-    else {
-        Canvas_CreateCanvas(800 * ratio, 800, parent);
-    }
+
+    Canvas_CreateCanvas(1000, 1000, parent);
 
     Canvas.style.width  = "100%";
     Canvas.style.height = "100%";
 
-
-    //
-    // Add information.
-    const info = document.createElement("p");
-    info.innerHTML = String_Cat(
-        PROJECT_TITLE,
-        PROJECT_DATE,
-        PROJECT_VERSION,
-        PROJECT_INSTRUCTIONS,
-        PROJECT_LINK,
-    )
-    parent.appendChild(info);
-
     //
     // Start the Demo...
     Random_Seed(1); // @todo(stdmatt): Add random seed.
-    Input_InstallBasicMouseHandler(Canvas);
 
     for(let i = 0; i < Random_Int(MIN_BALLS, MAX_BALLS); ++i) {
         CreateBall();
     }
-
-    max_dist = Math_Distance(
-        Canvas_Half_Width, Canvas_Half_Height,
-        Canvas_Edge_Left,  Canvas_Edge_Top
-    );
 
     Canvas_Draw(0);
 }
